@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class Planejamento {
 
-    String ano;
-    String semestre;
-    int horas;
-    Map<Area, Integer> porcentagens;
-    List<Disciplina> disciplinas;
+    public String ano;
+    public String semestre;
+    public int horas;
+    public Map<Area, Integer> porcentagens;
+    public List<Disciplina> disciplinas;
 
     public Planejamento(String ano, String semestre, int horas) {
         this.ano = ano;
@@ -25,24 +25,12 @@ public class Planejamento {
         return ano;
     }
 
-    public void setAno(String ano) {
-        this.ano = ano;
-    }
-
     public String getSemestre() {
         return semestre;
     }
 
-    public void setSemestre(String semestre) {
-        this.semestre = semestre;
-    }
-
     public int getHoras() {
         return horas;
-    }
-
-    public void setHoras(int horas) {
-        this.horas = horas;
     }
 
     public Map<Area, Integer> getPorcentagens() {
@@ -51,6 +39,10 @@ public class Planejamento {
 
     public void setPorcentagens(Map<Area, Integer> porcentagens) {
         this.porcentagens = porcentagens;
+    }
+
+    public String getAnoSemestre(){
+        return getAno() + "/" + getSemestre();
     }
 
     public List<Disciplina> getDisciplinas() {

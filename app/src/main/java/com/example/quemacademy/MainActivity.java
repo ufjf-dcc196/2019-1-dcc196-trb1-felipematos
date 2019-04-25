@@ -1,8 +1,10 @@
 package com.example.quemacademy;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.quemacademy.models.Area;
@@ -19,10 +22,14 @@ import com.example.quemacademy.models.Planejamento;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    List<Planejamento> planejamentos = new ArrayList<>();
+    private static final int RESULT_NOVO = 1;
+
+    public static List<Planejamento> planejamentos = new ArrayList<>();
+    private final PAdapter pAdapter = new PAdapter();
 
     void setInitialData() {
         Planejamento p1 = new Planejamento("2018", "2", 100);
@@ -71,9 +78,38 @@ public class MainActivity extends AppCompatActivity {
         setInitialData();
 
         RecyclerView rv = findViewById(R.id.rvPlanejamento);
-        PAdapter pAdapter = new PAdapter();
         rv.setAdapter(pAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
+        Button btnNovoPlan = findViewById(R.id.buttonNovoPlan);
+        btnNovoPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NovoPlanejamentoActivity.class);
+                startActivityForResult(intent, RESULT_NOVO);
+            }
+        });
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        System.out.println("onActivityResult");
+        if (Activity.RESULT_OK == resultCode && data != null){
+            switch (requestCode){
+                case RESULT_NOVO:
+                    String[] parts = data.getStringArrayExtra("planejamento");
+                    Planejamento plan = new Planejamento(parts[0], parts[1], Integer.parseInt(parts[2]));
+                    Map<Area, Integer> map = plan.getPorcentagens();
+                    map.put(Area.LINGUAS, Integer.parseInt(parts[3]));
+                    map.put(Area.EXATAS, Integer.parseInt(parts[4]));
+                    map.put(Area.SAUDE, Integer.parseInt(parts[5]));
+                    map.put(Area.HUMANIDADES, Integer.parseInt(parts[6]));
+                    planejamentos.add(plan);
+            }
+            pAdapter.notifyDataSetChanged();
+        }
     }
 
     public class PAdapter extends RecyclerView.Adapter<PAdapter.ViewHolder> {
@@ -83,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
             Context context = viewGroup.getContext();
             LayoutInflater infl = LayoutInflater.from(context);
-            View linha = infl.inflate(R.layout.planejamento_item, viewGroup, false);
-            return new ViewHolder(linha);
+            View view = infl.inflate(R.layout.planejamento_item, viewGroup, false);
+            return new ViewHolder(view);
         }
 
         @Override
@@ -110,6 +146,17 @@ public class MainActivity extends AppCompatActivity {
 
             ViewHolder(@NonNull View itemView) {
                 super(itemView);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Intent intent = new Intent(MainActivity.this, DisciplinasCursadasActivity.class);
+                            intent.putExtra("position", position);
+                            startActivity(intent);
+                        }
+                    }
+                });
                 anoSemestre = itemView.findViewById(R.id.textAnoSemestre);
                 horasPlanejadas = itemView.findViewById(R.id.textHorasPlanejadas);
                 horasComputadas = itemView.findViewById(R.id.textHorasComputadas);
@@ -121,9 +168,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             void setData(Planejamento planejamento){
-                @SuppressLint("DefaultLocale")
-                String textAnoSemestre = String.format("%s/%s", planejamento.getAno(), planejamento.getSemestre());
-                anoSemestre.setText(textAnoSemestre);
+                anoSemestre.setText(planejamento.getAnoSemestre());
                 horasPlanejadas.setText(Integer.toString(planejamento.getHoras()));
                 horasComputadas.setText(Integer.toString(planejamento.getHorasComputadas()));
                 percent.setText(Float.toString((planejamento.getPercent())));
@@ -136,14 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                /*
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onPalavraClick(v, position);
-                }
-                */
+                 //????
             }
         }
-
     }
 }

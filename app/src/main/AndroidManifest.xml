@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".NovoPlanejamentoActivity" />
+        <activity android:name=".DisciplinasCursadasActivity" />
+        <activity android:name=".NovaDisciplinaCursadaActivity" />
+        <activity android:name=".DetalhesPlanejamentoActivity" />
     </application>
 
 </manifest>

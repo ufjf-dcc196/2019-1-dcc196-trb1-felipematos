@@ -15,16 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.quemacademy.models.Area;
 import com.example.quemacademy.models.Disciplina;
 import com.example.quemacademy.models.Planejamento;
 
+import java.util.Map;
+
 public class DisciplinasCursadasActivity extends AppCompatActivity {
 
-    private static final int RESULT_NOVO = 1;
-    private static final int RESULT_EDIT = 2;
+    static final int EDIT_PLANEJAMENTO = 1;
+    static final int NOVA_DISCIPLINA = 2;
 
     Planejamento planejamento;
-    boolean requiresUpdate = false;
+    DAdapter dAdapter = new DAdapter();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,12 +37,9 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         final int index = bundle.getInt("position");
         planejamento = MainActivity.planejamentos.get(index);
-
-        ((TextView)findViewById(R.id.textDiscAnoSemestre)).setText(planejamento.getAnoSemestre());
-        ((TextView)findViewById(R.id.textDiscCargaHoraria)).setText(Integer.toString(planejamento.getHoras()));
+        setTextData(planejamento);
 
         RecyclerView rv = findViewById(R.id.rvDisciplinasCursadas);
-        DAdapter dAdapter = new DAdapter();
         rv.setAdapter(dAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -48,8 +48,7 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DisciplinasCursadasActivity.this, NovaDisciplinaCursadaActivity.class);
-                startActivity(intent);
-                requiresUpdate = true;
+                startActivityForResult(intent, NOVA_DISCIPLINA);
             }
         });
 
@@ -59,18 +58,32 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(DisciplinasCursadasActivity.this, DetalhesPlanejamentoActivity.class);
                 intent.putExtra("position", index);
-                startActivity(intent);
-                requiresUpdate = true;
+                startActivityForResult(intent, EDIT_PLANEJAMENTO);
             }
         });
     }
 
     @Override
-    public void onBackPressed() {
-        System.out.println("on back pressed");
-        if (requiresUpdate){
-            setResult(Activity.RESULT_OK);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (Activity.RESULT_OK == resultCode){
+            switch (requestCode){
+                case EDIT_PLANEJAMENTO:
+                    setTextData(planejamento);
+                    break;
+                case NOVA_DISCIPLINA:
+                    dAdapter.notifyDataSetChanged();
+                    break;
+            }
         }
+    }
+
+    public void setTextData(Planejamento planejamento) {
+        ((TextView)findViewById(R.id.textDiscAnoSemestre)).setText(planejamento.getAnoSemestre());
+        ((TextView)findViewById(R.id.textDiscCargaHoraria)).setText(Integer.toString(planejamento.getHoras()));
+    }
+
+    @Override
+    public void onBackPressed() {
         finish();
     }
 

@@ -144,13 +144,13 @@
 
     <TextView
         android:id="@+id/textPercentS"
-        android:layout_width="100dp"
+        android:layout_width="60dp"
         android:layout_height="24dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="132dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textPercentH"
+        app:layout_constraintStart_toEndOf="@+id/textPercentE"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -161,7 +161,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="132dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textPercentE"
+        app:layout_constraintStart_toEndOf="@+id/textPercentS"
         app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

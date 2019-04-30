@@ -76,6 +76,6 @@ public class Planejamento {
     }
 
     public float getPercent(Area a){
-        return Math.round(getHorasComputadas(a) * 100) / horas;
+        return Math.round( (getHorasComputadas(a) * 100) / porcentagens.get(a));
     }
 }

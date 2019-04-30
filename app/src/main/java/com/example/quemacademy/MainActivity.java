@@ -27,6 +27,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private static final int RESULT_NOVO = 1;
+    private static final int PLAN_DETALHES = 2;
 
     public static List<Planejamento> planejamentos = new ArrayList<>();
     private final PAdapter pAdapter = new PAdapter();
@@ -75,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setInitialData();
-
+        if (planejamentos.size() == 0 ){
+            setInitialData();
+        }
         RecyclerView rv = findViewById(R.id.rvPlanejamento);
         rv.setAdapter(pAdapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -95,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        System.out.println("onActivityResult");
         if (Activity.RESULT_OK == resultCode && data != null){
             switch (requestCode){
                 case RESULT_NOVO:
@@ -108,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
                     map.put(Area.HUMANIDADES, Integer.parseInt(parts[6]));
                     planejamentos.add(plan);
             }
+        }
+        if (Activity.RESULT_CANCELED == resultCode) {
             pAdapter.notifyDataSetChanged();
         }
     }
@@ -153,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                         if (position != RecyclerView.NO_POSITION) {
                             Intent intent = new Intent(MainActivity.this, DisciplinasCursadasActivity.class);
                             intent.putExtra("position", position);
-                            startActivity(intent);
+                            startActivityForResult(intent, PLAN_DETALHES);
                         }
                     }
                 });
@@ -169,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
             void setData(Planejamento planejamento){
                 anoSemestre.setText(planejamento.getAnoSemestre());
+
                 horasPlanejadas.setText(Integer.toString(planejamento.getHoras()));
                 horasComputadas.setText(Integer.toString(planejamento.getHorasComputadas()));
                 percent.setText(Float.toString((planejamento.getPercent())));

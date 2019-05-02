@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     void setInitialData() {
         Planejamento p1 = new Planejamento("2018", "2", 100);
         Planejamento p2 = new Planejamento("2019", "1", 80);
-        //Planejamento p3 = new Planejamento("2019", "2", 10);
 
         Disciplina d1 = new Disciplina("AA", 10, Area.EXATAS);
         Disciplina d2 = new Disciplina("BB", 13, Area.EXATAS);
@@ -115,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Adapter da lista de Planejamentos na tela inicial
     public class PAdapter extends RecyclerView.Adapter<PAdapter.ViewHolder> {
 
         @NonNull
@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
             ViewHolder(@NonNull View itemView) {
                 super(itemView);
+                // Click em item da lista de planejamentos
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -173,13 +174,13 @@ public class MainActivity extends AppCompatActivity {
             void setData(Planejamento planejamento){
                 anoSemestre.setText(planejamento.getAnoSemestre());
 
-                horasPlanejadas.setText(Integer.toString(planejamento.getHoras()));
+                horasPlanejadas.setText(Integer.toString(planejamento.horas));
                 horasComputadas.setText(Integer.toString(planejamento.getHorasComputadas()));
-                percent.setText(Float.toString((planejamento.getPercent())));
-                percentE.setText(Float.toString((planejamento.getPercent(Area.EXATAS))));
-                percentS.setText(Float.toString((planejamento.getPercent(Area.SAUDE))));
-                percentH.setText(Float.toString((planejamento.getPercent(Area.HUMANIDADES))));
-                percentL.setText(Float.toString((planejamento.getPercent(Area.LINGUAS))));
+                percent.setText(Integer.toString((planejamento.getPercent())) + "%");
+                percentE.setText(Integer.toString((planejamento.getPercent(Area.EXATAS))) + "%");
+                percentS.setText(Integer.toString((planejamento.getPercent(Area.SAUDE))) + "%");
+                percentH.setText(Integer.toString((planejamento.getPercent(Area.HUMANIDADES))) + "%");
+                percentL.setText(Integer.toString((planejamento.getPercent(Area.LINGUAS))) + "%");
 
             }
 

@@ -19,8 +19,6 @@ import com.example.quemacademy.models.Area;
 import com.example.quemacademy.models.Disciplina;
 import com.example.quemacademy.models.Planejamento;
 
-import java.util.Map;
-
 public class DisciplinasCursadasActivity extends AppCompatActivity {
 
     static final int EDIT_PLANEJAMENTO = 1;
@@ -71,7 +69,14 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
                     setTextData(planejamento);
                     break;
                 case NOVA_DISCIPLINA:
-                    dAdapter.notifyDataSetChanged();
+                    if (data != null) {
+                        int hora = data.getIntExtra("horas", 0);
+                        String nome = data.getStringExtra("nome");
+                        String area = data.getStringExtra("area");
+                        planejamento.disciplinas.add(new Disciplina(nome, hora, Area.valueOf(area)));
+                        dAdapter.notifyDataSetChanged();
+
+                    }
                     break;
             }
         }
@@ -79,7 +84,7 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
 
     public void setTextData(Planejamento planejamento) {
         ((TextView)findViewById(R.id.textDiscAnoSemestre)).setText(planejamento.getAnoSemestre());
-        ((TextView)findViewById(R.id.textDiscCargaHoraria)).setText(Integer.toString(planejamento.getHoras()));
+        ((TextView)findViewById(R.id.textDiscCargaHoraria)).setText(Integer.toString(planejamento.horas));
     }
 
     @Override
@@ -108,7 +113,7 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
             return planejamento.disciplinas.size();
         }
 
-        private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private class ViewHolder extends RecyclerView.ViewHolder {
             TextView area;
             TextView nome;
             TextView horas;
@@ -125,18 +130,6 @@ public class DisciplinasCursadasActivity extends AppCompatActivity {
                 area.setText(disciplina.area.name());
                 nome.setText(disciplina.titulo);
                 horas.setText(Integer.toString(disciplina.horas));
-            }
-
-            @Override
-            public void onClick(View v) {
-                /*
-                int position = getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    Intent intent = new Intent(MainActivity.this, DisciplinasCursadasActivity.class);
-                    intent.putExtra("position", position);
-                    startActivity(intent);
-                }
-                */
             }
         }
     }

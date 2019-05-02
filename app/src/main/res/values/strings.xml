@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">QuemAcademy</string>
+    <string-array name="area_array">
+        <item>LINGUAS</item>
+        <item>EXATAS</item>
+        <item>SAUDE</item>
+        <item>HUMANIDADES</item>
+    </string-array>
 </resources>

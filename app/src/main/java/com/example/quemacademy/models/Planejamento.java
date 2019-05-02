@@ -29,10 +29,6 @@ public class Planejamento {
         return semestre;
     }
 
-    public int getHoras() {
-        return horas;
-    }
-
     public Map<Area, Integer> getPorcentagens() {
         return porcentagens;
     }
@@ -47,10 +43,6 @@ public class Planejamento {
 
     public List<Disciplina> getDisciplinas() {
         return disciplinas;
-    }
-
-    public void setDisciplinas(List<Disciplina> disciplinas) {
-        this.disciplinas = disciplinas;
     }
 
     public int getHorasComputadas(){
@@ -71,11 +63,11 @@ public class Planejamento {
         return result;
     }
 
-    public float getPercent(){
+    public int getPercent(){
         return Math.round(getHorasComputadas() * 100) / horas;
     }
 
-    public float getPercent(Area a){
-        return Math.round( (getHorasComputadas(a) * 100) / porcentagens.get(a));
+    public int getPercent(Area a){
+        return (getHorasComputadas(a) * 100) / porcentagens.get(a);
     }
 }
